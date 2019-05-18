@@ -18,11 +18,13 @@
   },
   "homepage": "https://github.com/flyswatter/js-eth-personal-sign-examples#readme",
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "eth-sig-util": "^2.1.0",
     "ethereumjs-util": "^5.1.1",
     "ethjs": "^0.3.0"
   },
   "devDependencies": {
-    "brfs": "^1.4.3"
+    "brfs": "^1.6.1",
+    "browserify": "^16.2.3"
   }
 }
