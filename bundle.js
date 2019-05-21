@@ -312,7 +312,55 @@ signTypedDataV3Button.addEventListener('click', function(event) {
     }
 
   })
+})
 
+trustWalletBug.addEventListener('click', function(event) {
+  event.preventDefault()
+
+  const typedData = {
+    types:{
+      EIP712Domain:[],
+      Test:[
+        {name: "test", type: "uint64"}
+      ],
+    },
+    primaryType:"Test",
+    domain: {},
+    message: {
+      test: 1,
+    },
+  };
+
+  var msgParams = JSON.stringify(typedData);
+
+  var from = web3.eth.accounts[0]
+
+  console.log('CLICKED, SENDING PERSONAL SIGN REQ', 'from', from, msgParams)
+  var params = [from, msgParams]
+  console.dir(params)
+  var method = 'eth_signTypedData_v3'
+
+  web3.currentProvider.sendAsync({
+    method,
+    params,
+    from,
+  }, function (err, result) {
+    if (err) return console.dir(err)
+    if (result.error) {
+      alert(result.error.message)
+    }
+    if (result.error) return console.error('ERROR', result)
+    console.log('TYPED SIGNED:' + JSON.stringify(result.result))
+
+    const recovered = sigUtil.recoverTypedSignature({ data: JSON.parse(msgParams), sig: result.result })
+    const hash = ethUtil.bufferToHex(sigUtil.TypedDataUtils.sign(typedData));
+
+    if (ethUtil.toChecksumAddress(recovered) === ethUtil.toChecksumAddress(from)) {
+      alert('Successfully ecRecovered signer as ' + from + "\nStructured data hash:\n" + hash)
+    } else {
+      alert('Failed to verify signer when comparing ' + recovered + ' to ' + from + "\nStructured data hash:\n" + hash);
+    }
+  })
 })
 
 ethjsSignTypedDataButton.addEventListener('click', function(event) {
