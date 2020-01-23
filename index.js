@@ -280,7 +280,7 @@ signTypedDataV3Button.addEventListener('click', function(event) {
     id: "18446744073709551617"}
   })
 
-    
+
 
   var from = web3.eth.accounts[0]
 
@@ -319,13 +319,13 @@ trustWalletBug.addEventListener('click', function(event) {
     types:{
       EIP712Domain:[],
       Test:[
-        {name: "test", type: "uint64"}
+        {name: "test", type: "int256"}
       ],
     },
     primaryType:"Test",
     domain: {},
     message: {
-      test: 1,
+      test: "-100000000000000",
     },
   };
 
