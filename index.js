@@ -312,6 +312,73 @@ signTypedDataV3Button.addEventListener('click', function(event) {
   })
 })
 
+signTypedDataDicetherButton.addEventListener('click', function(event) {
+  event.preventDefault()
+
+  const msgParams = JSON.stringify({
+    "types": {
+      "EIP712Domain": [{"name": "name", "type": "string"}, {
+        "name": "version",
+        "type": "string"
+      }, {"name": "chainId", "type": "uint256"}, {"name": "verifyingContract", "type": "address"}],
+      "Bet": [{"name": "roundId", "type": "uint32"}, {"name": "gameType", "type": "uint8"}, {
+        "name": "number",
+        "type": "uint256"
+      }, {"name": "value", "type": "uint256"}, {"name": "balance", "type": "int256"}, {
+        "name": "serverHash",
+        "type": "bytes32"
+      }, {"name": "userHash", "type": "bytes32"}, {"name": "gameId", "type": "uint256"}]
+    },
+    "primaryType": "Bet",
+    "domain": {
+      "name": "Dicether",
+      "version": "2",
+      "chainId": 1,
+      "verifyingContract": "0xaEc1F783B29Aab2727d7C374Aa55483fe299feFa"
+    },
+    "message": {
+      "roundId": 1,
+      "gameType": 4,
+      "num": 1,
+      "value": "320000000000000",
+      "balance": "0",
+      "serverHash": "0x4ed3c2d4c6acd062a3a61add7ecdb2fcfd988d944ba18e52a0b0d912d7a43cf4",
+      "userHash": "0x6901562dd98a823e76140dc8728eca225174406eaa6bf0da7b0ab67f6f93de4d",
+      "gameId": 2393,
+      "number": 1
+    }
+  });
+
+  var from = web3.eth.accounts[0]
+
+  console.log('CLICKED, SENDING PERSONAL SIGN REQ', 'from', from, msgParams)
+  var params = [from, msgParams]
+  console.dir(params)
+  var method = 'eth_signTypedData_v3'
+
+  web3.currentProvider.sendAsync({
+    method,
+    params,
+    from,
+  }, function (err, result) {
+    if (err) return console.dir(err)
+    if (result.error) {
+      alert(result.error.message)
+    }
+    if (result.error) return console.error('ERROR', result)
+    console.log('TYPED SIGNED:' + JSON.stringify(result.result))
+
+    const recovered = sigUtil.recoverTypedSignature({ data: JSON.parse(msgParams), sig: result.result })
+
+    if (ethUtil.toChecksumAddress(recovered) === ethUtil.toChecksumAddress(from)) {
+      alert('Successfully ecRecovered signer as ' + from)
+    } else {
+      alert('Failed to verify signer when comparing ' + result + ' to ' + from)
+    }
+
+  })
+})
+
 trustWalletBug.addEventListener('click', function(event) {
   event.preventDefault()
 
