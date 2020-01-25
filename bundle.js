@@ -388,13 +388,13 @@ trustWalletBug.addEventListener('click', function(event) {
     types:{
       EIP712Domain:[],
       Test:[
-        {name: "test", type: "int256"}
+        {name: "test", type: "uint32"}
       ],
     },
     primaryType:"Test",
     domain: {},
     message: {
-      test: "-100000000000000",
+      test: 0,
     },
   };
 
