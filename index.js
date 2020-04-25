@@ -386,13 +386,14 @@ trustWalletBug.addEventListener('click', function(event) {
     types:{
       EIP712Domain:[],
       Test:[
-        {name: "test", type: "uint32"}
+        {name: "test", type: "uint256"}
       ],
     },
     primaryType:"Test",
     domain: {},
     message: {
-      test: 0,
+      //test: "57896044618658097711785492504343953926634992332820282019728792003956564819967", // OK: 2^255 - 1
+        test: "57896044618658097711785492504343953926634992332820282019728792003956564819968", // fails: 2^255
     },
   };
 
